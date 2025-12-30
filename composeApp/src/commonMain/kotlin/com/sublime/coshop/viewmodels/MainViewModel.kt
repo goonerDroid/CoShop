@@ -14,7 +14,7 @@ class MainViewModel {
         private set
 
     fun checkConnection() {
-        CoroutineScope(Dispatchers.Default).launch {
+         CoroutineScope(Dispatchers.Default).launch {
             try {
                 val session = SupabaseClient.client.auth.currentSessionOrNull()
 
