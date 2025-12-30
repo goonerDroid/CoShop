@@ -1,3 +1,4 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
@@ -20,16 +21,10 @@ buildkonfig {
     objectName = "AppConfig"
 
     defaultConfigs {
-        buildConfigField(
-            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
-            "SUPABASE_URL",
-            localProperties.getProperty("supabase.url") ?: ""
-        )
-        buildConfigField(
-            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
-            "SUPABASE_KEY",
-            localProperties.getProperty("supabase.key") ?: ""
-        )
+        defaultConfigs {
+            buildConfigField(FieldSpec.Type.STRING, "SUPABASE_URL", localProperties.getProperty("supabase.url") ?: "MISSING_URL")
+            buildConfigField(FieldSpec.Type.STRING, "SUPABASE_KEY", localProperties.getProperty("supabase.key") ?: "MISSING_KEY")
+        }
     }
 }
 
@@ -41,12 +36,14 @@ kotlin {
     }
     
     listOf(
+        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = true
+            isStatic = false
+            binaryOption("bundleId", "com.sublime.coshop")
         }
     }
     
@@ -62,6 +59,7 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
+            implementation(compose.material)
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
