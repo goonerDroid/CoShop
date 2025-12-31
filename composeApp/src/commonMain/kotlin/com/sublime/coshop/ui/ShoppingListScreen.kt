@@ -1,127 +1,81 @@
 package com.sublime.coshop.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import com.sublime.coshop.data.models.Family
+import com.sublime.coshop.data.models.FamilyMember
+import com.sublime.coshop.data.models.ItemCategory
 import com.sublime.coshop.data.models.ShoppingItem
-import com.sublime.coshop.viewmodels.ShoppingListViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListScreen() {
-    val viewModel = remember { ShoppingListViewModel() }
-    val items by viewModel.items.collectAsState()
-    var showDialog by remember { mutableStateOf(false) }
+    val currentUserId = "user_1"
+    val isCurrentUserAdmin = true
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("ShopSquad") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { showDialog = true }) {
-//                Icon(Icons.Default.Add, contentDescription = "Add item")
-            }
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            items(items) { item ->
-                ShoppingListItem(
-                    item = item,
-                    onBoughtChange = { isBought ->
-                        viewModel.onBoughtChange(item, isBought)
-                    }
-                )
-            }
-        }
+    val family = Family(
+        id = "family_1", name = "Family Grocery", subtitle = "Lets shop together!"
+    )
 
-        if (showDialog) {
-            AddItemDialog(
-                onDismiss = { showDialog = false },
-                onAddItem = { itemName ->
-                    viewModel.addItem(itemName)
-                    showDialog = false
-                }
+    val familyMembers = listOf(
+        FamilyMember(
+            "user_1",
+            "J",
+            "John",
+            Color(0xFF2196F3),
+            isCurrentUser = true,
+            isAdmin = true,
+            lastCheckedItemCategory = ItemCategory.BAKERY
+        ), FamilyMember(
+            "user_2",
+            "J",
+            "Jane",
+            Color(0xFFE53935),
+            isCurrentUser = false,
+            isAdmin = false,
+            lastCheckedItemCategory = ItemCategory.DAIRY
+        ), FamilyMember(
+            "user_3",
+            "B",
+            "Bob",
+            Color(0xFF4CAF50),
+            isCurrentUser = false,
+            isAdmin = false,
+            lastCheckedItemCategory = null
+        )
+    )
+
+    var items by remember {
+        mutableStateOf(
+            listOf(
+                ShoppingItem("1", "Organic Apples", "2 lbs", ItemCategory.PRODUCE, "user_1", true),
+                ShoppingItem("2", "Whole Milk", "1 gallon", ItemCategory.DAIRY, "user_2", true),
+                ShoppingItem("3", "Sourdough Bread", "1 loaf", ItemCategory.BAKERY, "user_1", true),
+                ShoppingItem("4", "Chicken Breast", "2 lbs", ItemCategory.MEAT, "user_2", true),
+                ShoppingItem("5", "Pasta", "1 box", ItemCategory.PANTRY, "user_1", false)
             )
-        }
+        )
     }
-}
 
-@Composable
-fun ShoppingListItem(
-    item: ShoppingItem,
-    onBoughtChange: (Boolean) -> Unit
-) {
-    ListItem(
-        headlineContent = { Text(item.name) },
-        trailingContent = {
-            Checkbox(
-                checked = item.isBought,
-                onCheckedChange = onBoughtChange
-            )
-        }
-    )
-}
+    val completedCount = items.count { it.isDone }
+    val totalCount = items.size
+    val currentUser = familyMembers.first { it.isCurrentUser }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddItemDialog(onDismiss: () -> Unit, onAddItem: (String) -> Unit) {
-    var text by remember { mutableStateOf("") }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Add a new item") },
-        text = {
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text("Item name") }
-            )
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    if (text.isNotBlank()) {
-                        onAddItem(text)
-                    }
-                }
-            ) {
-                Text("Add")
-            }
-        },
-        dismissButton = {
-            Button(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
+    Column(
+        modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5))
+    ) {
+        HeaderSection(
+            family = family,
+            currentUser = currentUser,
+            completedCount = completedCount,
+            totalCount = totalCount
+        )
+    }
 }
