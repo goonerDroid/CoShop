@@ -165,7 +165,7 @@ fun ShoppingListScreen() {
             onDismiss = { showAddListDialog = false },
             onConfirm = { name, emoji ->
                 val newList = ShoppingList(
-                    id = "list_${System.currentTimeMillis()}",
+                    id = "list_${kotlin.random.Random.nextInt(10000, 99999)}",
                     name = name,
                     emoji = emoji,
                     familyId = family.id,
