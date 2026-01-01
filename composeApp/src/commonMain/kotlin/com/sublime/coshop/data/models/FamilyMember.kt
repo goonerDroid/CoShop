@@ -9,5 +9,5 @@ data class FamilyMember(
     val color: Color,
     val isCurrentUser: Boolean = false,
     val isAdmin: Boolean = false,
-    val lastCheckedItemCategory: ItemCategory?
+    val lastCheckedItemName: String? = null
 )

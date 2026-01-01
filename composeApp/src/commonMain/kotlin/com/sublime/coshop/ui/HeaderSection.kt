@@ -1,7 +1,5 @@
 package com.sublime.coshop.ui
 
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,12 +14,10 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.Surface
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.Text
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sublime.coshop.data.models.Family
 import com.sublime.coshop.data.models.FamilyMember
-import com.sublime.coshop.data.models.ItemCategory
 import coshop.composeapp.generated.resources.Res
 import coshop.composeapp.generated.resources.ic_crown
 import org.jetbrains.compose.resources.painterResource
@@ -161,7 +156,7 @@ fun HeaderSectionPreview() {
                 color = Color(0xFF2196F3),
                 isCurrentUser = true,
                 isAdmin = true,
-                lastCheckedItemCategory = null
+                lastCheckedItemName = "Organic Apples"
             ),
             completedCount = 2,
             totalCount = 5
@@ -186,7 +181,7 @@ fun HeaderSectionNonAdminPreview() {
                 color = Color(0xFFE91E63),
                 isCurrentUser = true,
                 isAdmin = false,
-                lastCheckedItemCategory = ItemCategory.DAIRY
+                lastCheckedItemName = "Whole Milk"
             ),
             completedCount = 4,
             totalCount = 6
