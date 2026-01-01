@@ -5,6 +5,7 @@
 xcuserdata
 !src/**/build/
 local.properties
+CLAUDE.md
 .idea
 .DS_Store
 captures

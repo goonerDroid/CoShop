@@ -10,4 +10,5 @@ data class ShoppingItem(
     val category: ItemCategory,
     val assignedUser: String,
     val isDone: Boolean = false,
+    val listId: String = ""
 )
