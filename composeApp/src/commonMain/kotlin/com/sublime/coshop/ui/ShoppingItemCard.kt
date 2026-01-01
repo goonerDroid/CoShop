@@ -40,6 +40,11 @@ fun ShoppingItemCard(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val checkboxColors = CheckboxDefaults.colors(
+        checkedColor = Color(0xFF1976D2),
+        uncheckedColor = Color(0xFFBDBDBD),
+        checkmarkColor = Color.White
+    )
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -64,11 +69,7 @@ fun ShoppingItemCard(
             Checkbox(
                 checked = item.isDone,
                 onCheckedChange = onCheckedChange,
-                colors = CheckboxDefaults.colors(
-                    checkedColor = Color(0xFF1976D2),
-                    uncheckedColor = Color(0xFFBDBDBD),
-                    checkmarkColor = Color.White
-                )
+                colors = checkboxColors
             )
 
             Spacer(modifier = Modifier.width(8.dp))
