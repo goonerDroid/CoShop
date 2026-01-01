@@ -9,5 +9,5 @@ enum class ItemCategory(val displayName: String, val color: Color, val icon: Str
 
     SEAFOOD("Seafood", Color(0xFF00BCD4), "🦐"),
     BAKERY("Bakery", Color(0xFFFF9800), "🍞"),
-    PANTRY("Pantry", Color(0xFF9C27B0), "🥫")
+    PANTRY("Pantry", Color(0xFF9C27B0), "🥫"),
 }

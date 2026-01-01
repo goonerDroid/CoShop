@@ -12,7 +12,7 @@ object MockData {
     val family = Family(
         id = "family_1",
         name = "Family Grocery",
-        subtitle = "Let's shop together!"
+        subtitle = "Let's shop together!",
     )
 
     val familyMembers = listOf(
@@ -23,7 +23,7 @@ object MockData {
             color = Color(0xFF2196F3),
             isCurrentUser = true,
             isAdmin = true,
-            lastCheckedItemName = "Organic Apples"
+            lastCheckedItemName = "Organic Apples",
         ),
         FamilyMember(
             id = "user_2",
@@ -32,7 +32,7 @@ object MockData {
             color = Color(0xFFE53935),
             isCurrentUser = false,
             isAdmin = false,
-            lastCheckedItemName = "Whole Milk"
+            lastCheckedItemName = "Whole Milk",
         ),
         FamilyMember(
             id = "user_3",
@@ -41,14 +41,14 @@ object MockData {
             color = Color(0xFF4CAF50),
             isCurrentUser = false,
             isAdmin = false,
-            lastCheckedItemName = null
-        )
+            lastCheckedItemName = null,
+        ),
     )
 
     val shoppingLists = listOf(
         ShoppingList("list_1", "Weekly Essentials", "🛒", "family_1", isDefault = true),
         ShoppingList("list_2", "Costco", "📦", "family_1"),
-        ShoppingList("list_3", "Indian Groceries", "🥘", "family_1")
+        ShoppingList("list_3", "Indian Groceries", "🥘", "family_1"),
     )
 
     val shoppingItems = listOf(
@@ -78,7 +78,7 @@ object MockData {
         ShoppingItem("19", "Naan Bread", "6 pack", ItemCategory.BAKERY, "user_3", false, "list_3"),
         ShoppingItem("20", "Paneer", "14 oz", ItemCategory.DAIRY, "user_2", false, "list_3"),
         ShoppingItem("21", "Turmeric Powder", "1 jar", ItemCategory.PANTRY, "user_1", true, "list_3"),
-        ShoppingItem("22", "Curry Leaves", "1 bunch", ItemCategory.PRODUCE, "user_3", false, "list_3")
+        ShoppingItem("22", "Curry Leaves", "1 bunch", ItemCategory.PRODUCE, "user_3", false, "list_3"),
     )
 
     const val currentUserId = "user_1"

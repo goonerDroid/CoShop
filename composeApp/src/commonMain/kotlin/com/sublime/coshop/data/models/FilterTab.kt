@@ -4,5 +4,5 @@ enum class FilterTab(val displayName: String) {
     ALL("All"),
     MINE("Mine"),
     ACTIVE("Active"),
-    DONE("Done")
+    DONE("Done"),
 }

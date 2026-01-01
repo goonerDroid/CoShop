@@ -34,34 +34,29 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ShoppingItemCard(
-    item: ShoppingItem,
-    assignedMemberName: String,
-    onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
-) {
+fun ShoppingItemCard(item: ShoppingItem, assignedMemberName: String, onCheckedChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     val checkboxColors = CheckboxDefaults.colors(
         checkedColor = Color(0xFF1976D2),
         uncheckedColor = Color(0xFFBDBDBD),
-        checkmarkColor = Color.White
+        checkmarkColor = Color.White,
     )
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         color = Color.White,
-        shadowElevation = 2.dp
+        shadowElevation = 2.dp,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(Res.drawable.ic_drag_indicator),
                 contentDescription = "Drag to reorder",
                 modifier = Modifier.size(24.dp),
-                colorFilter = ColorFilter.tint(Color(0xFFBDBDBD))
+                colorFilter = ColorFilter.tint(Color(0xFFBDBDBD)),
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -69,7 +64,7 @@ fun ShoppingItemCard(
             Checkbox(
                 checked = item.isDone,
                 onCheckedChange = onCheckedChange,
-                colors = checkboxColors
+                colors = checkboxColors,
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -77,7 +72,7 @@ fun ShoppingItemCard(
             Column(modifier = Modifier.weight(1f)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         text = item.name,
@@ -87,7 +82,7 @@ fun ShoppingItemCard(
                         textDecoration = if (item.isDone) TextDecoration.LineThrough else TextDecoration.None,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false)
+                        modifier = Modifier.weight(1f, fill = false),
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -101,7 +96,7 @@ fun ShoppingItemCard(
                     Text(
                         text = item.quantity,
                         fontSize = 14.sp,
-                        color = Color(0xFF757575)
+                        color = Color(0xFF757575),
                     )
 
                     Spacer(modifier = Modifier.width(12.dp))
@@ -110,7 +105,7 @@ fun ShoppingItemCard(
                         painter = painterResource(Res.drawable.ic_group),
                         contentDescription = "Assigned to",
                         modifier = Modifier.size(16.dp),
-                        colorFilter = ColorFilter.tint(Color(0xFF9E9E9E))
+                        colorFilter = ColorFilter.tint(Color(0xFF9E9E9E)),
                     )
 
                     Spacer(modifier = Modifier.width(4.dp))
@@ -118,7 +113,7 @@ fun ShoppingItemCard(
                     Text(
                         text = assignedMemberName,
                         fontSize = 14.sp,
-                        color = Color(0xFF757575)
+                        color = Color(0xFF757575),
                     )
                 }
             }
@@ -137,10 +132,10 @@ fun ShoppingItemCardActivePreview() {
                 quantity = "2 lbs",
                 category = ItemCategory.PRODUCE,
                 assignedUser = "user_1",
-                isDone = false
+                isDone = false,
             ),
             assignedMemberName = "John",
-            onCheckedChange = {}
+            onCheckedChange = {},
         )
     }
 }
@@ -156,10 +151,10 @@ fun ShoppingItemCardDonePreview() {
                 quantity = "1 loaf",
                 category = ItemCategory.BAKERY,
                 assignedUser = "user_1",
-                isDone = true
+                isDone = true,
             ),
             assignedMemberName = "John",
-            onCheckedChange = {}
+            onCheckedChange = {},
         )
     }
 }
@@ -175,10 +170,10 @@ fun ShoppingItemCardLongNamePreview() {
                 quantity = "2 lbs",
                 category = ItemCategory.MEAT,
                 assignedUser = "user_2",
-                isDone = false
+                isDone = false,
             ),
             assignedMemberName = "Jane",
-            onCheckedChange = {}
+            onCheckedChange = {},
         )
     }
 }

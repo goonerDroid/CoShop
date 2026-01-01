@@ -16,22 +16,18 @@ import com.sublime.coshop.data.models.ShoppingItem
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ShoppingItemsList(
-    items: List<ShoppingItem>,
-    familyMembers: List<FamilyMember>,
-    onItemCheckedChange: (ShoppingItem, Boolean) -> Unit
-) {
+fun ShoppingItemsList(items: List<ShoppingItem>, familyMembers: List<FamilyMember>, onItemCheckedChange: (ShoppingItem, Boolean) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(items, key = { it.id }) { item ->
             val assignedMember = familyMembers.find { it.id == item.assignedUser }
             ShoppingItemCard(
                 item = item,
                 assignedMemberName = assignedMember?.name ?: "Unknown",
-                onCheckedChange = { checked -> onItemCheckedChange(item, checked) }
+                onCheckedChange = { checked -> onItemCheckedChange(item, checked) },
             )
         }
     }
@@ -48,7 +44,7 @@ fun ShoppingItemsListPreview() {
             color = Color(0xFF2196F3),
             isCurrentUser = true,
             isAdmin = true,
-            lastCheckedItemName = "Sourdough Bread"
+            lastCheckedItemName = "Sourdough Bread",
         ),
         FamilyMember(
             id = "user_2",
@@ -57,20 +53,20 @@ fun ShoppingItemsListPreview() {
             color = Color(0xFFE53935),
             isCurrentUser = false,
             isAdmin = false,
-            lastCheckedItemName = "Whole Milk"
-        )
+            lastCheckedItemName = "Whole Milk",
+        ),
     )
     val items = listOf(
         ShoppingItem("1", "Organic Apples", "2 lbs", ItemCategory.PRODUCE, "user_1", false),
         ShoppingItem("2", "Whole Milk", "1 gallon", ItemCategory.DAIRY, "user_2", false),
-        ShoppingItem("3", "Sourdough Bread", "1 loaf", ItemCategory.BAKERY, "user_1", true)
+        ShoppingItem("3", "Sourdough Bread", "1 loaf", ItemCategory.BAKERY, "user_1", true),
     )
 
     MaterialTheme {
         ShoppingItemsList(
             items = items,
             familyMembers = familyMembers,
-            onItemCheckedChange = { _, _ -> }
+            onItemCheckedChange = { _, _ -> },
         )
     }
 }

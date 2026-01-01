@@ -1,6 +1,7 @@
 package com.sublime.coshop.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -25,11 +25,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.sublime.coshop.data.MockData
 import com.sublime.coshop.data.models.FilterTab
+import com.sublime.coshop.data.models.ShoppingItem
 import com.sublime.coshop.data.models.ShoppingList
 import coshop.composeapp.generated.resources.Res
 import coshop.composeapp.generated.resources.ic_add
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.random.Random
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -48,6 +50,7 @@ fun ShoppingListScreen() {
     }
 
     var showAddListDialog by remember { mutableStateOf(false) }
+    var showAddItemDialog by remember { mutableStateOf(false) }
 
     var items by remember { mutableStateOf(MockData.shoppingItems) }
 
@@ -89,7 +92,7 @@ fun ShoppingListScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
+            .background(Color(0xFFF5F5F5)),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             HeaderSection(
@@ -100,16 +103,16 @@ fun ShoppingListScreen() {
                 currentList = currentList,
                 shoppingLists = shoppingLists,
                 onListSelected = { list -> selectedListId = list.id },
-                onAddListClick = { showAddListDialog = true }
+                onAddListClick = { showAddListDialog = true },
             )
 
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 item {
                     FamilyMembersSection(
                         familyMembers = familyMembers,
-                        onAddMemberClick = { /* TODO */ }
+                        onAddMemberClick = { /* TODO */ },
                     )
                 }
 
@@ -120,14 +123,14 @@ fun ShoppingListScreen() {
                         allCount = allCount,
                         mineCount = mineCount,
                         activeCount = activeCount,
-                        doneCount = doneCount
+                        doneCount = doneCount,
                     )
                 }
 
                 if (filteredItems.isEmpty()) {
                     item {
                         EmptyListState(
-                            modifier = Modifier.padding(top = 64.dp)
+                            modifier = Modifier.padding(top = 64.dp),
                         )
                     }
                 } else {
@@ -136,7 +139,7 @@ fun ShoppingListScreen() {
                             item = item,
                             assignedMemberName = memberNameById[item.assignedUser] ?: "Unknown",
                             onCheckedChange = { checked -> onItemCheckedChange(item.id, checked) },
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                         )
                     }
                 }
@@ -144,18 +147,18 @@ fun ShoppingListScreen() {
         }
 
         FloatingActionButton(
-            onClick = { /* TODO: Add item */ },
+            onClick = { showAddItemDialog = true },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
             shape = CircleShape,
             containerColor = Color(0xFF1976D2),
-            contentColor = Color.White
+            contentColor = Color.White,
         ) {
             Image(
                 painter = painterResource(Res.drawable.ic_add),
                 contentDescription = "Add item",
-                colorFilter = ColorFilter.tint(Color.White)
+                colorFilter = ColorFilter.tint(Color.White),
             )
         }
     }
@@ -169,16 +172,35 @@ fun ShoppingListScreen() {
                     name = name,
                     emoji = emoji,
                     familyId = family.id,
-                    isDefault = false
+                    isDefault = false,
                 )
                 shoppingLists = shoppingLists + newList
                 selectedListId = newList.id
                 showAddListDialog = false
-            }
+            },
+        )
+    }
+
+    if (showAddItemDialog) {
+        AddItemDialog(
+            familyMembers = familyMembers,
+            onDismiss = { showAddItemDialog = false },
+            onConfirm = { name, quantity, category, assignedUserId ->
+                val newItem = ShoppingItem(
+                    id = "item_${Random.nextInt(10000, 99999)}",
+                    name = name,
+                    quantity = quantity,
+                    category = category,
+                    assignedUser = assignedUserId,
+                    isDone = false,
+                    listId = selectedListId,
+                )
+                items = items + newItem
+                showAddItemDialog = false
+            },
         )
     }
 }
-
 
 @Preview
 @Composable

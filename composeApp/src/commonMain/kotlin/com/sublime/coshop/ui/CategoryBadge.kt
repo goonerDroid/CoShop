@@ -22,22 +22,22 @@ fun CategoryBadge(category: ItemCategory) {
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = category.color.copy(alpha = 0.1f),
-        border = androidx.compose.foundation.BorderStroke(1.dp, category.color.copy(alpha = 0.3f))
+        border = androidx.compose.foundation.BorderStroke(1.dp, category.color.copy(alpha = 0.3f)),
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = category.icon,
-                fontSize = 12.sp
+                fontSize = 12.sp,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = category.displayName,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
-                color = category.color
+                color = category.color,
             )
         }
     }

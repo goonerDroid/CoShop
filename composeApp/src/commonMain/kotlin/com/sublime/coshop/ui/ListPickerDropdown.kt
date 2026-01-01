@@ -34,11 +34,11 @@ fun ListPickerDropdown(
     onAddListClick: () -> Unit,
     isAdmin: Boolean,
     expanded: Boolean,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     DropdownMenu(
         expanded = expanded,
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
     ) {
         shoppingLists.forEach { list ->
             val isSelected = list.id == selectedList.id
@@ -47,14 +47,14 @@ fun ListPickerDropdown(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = list.emoji,
-                            fontSize = 18.sp
+                            fontSize = 18.sp,
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
                             text = list.name,
                             fontSize = 16.sp,
                             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                            color = if (isSelected) Color(0xFF1976D2) else Color(0xFF212121)
+                            color = if (isSelected) Color(0xFF1976D2) else Color(0xFF212121),
                         )
                     }
                 },
@@ -65,10 +65,10 @@ fun ListPickerDropdown(
                             painter = painterResource(Res.drawable.ic_check_circle),
                             contentDescription = "Selected",
                             modifier = Modifier.size(20.dp),
-                            colorFilter = ColorFilter.tint(Color(0xFF1976D2))
+                            colorFilter = ColorFilter.tint(Color(0xFF1976D2)),
                         )
                     }
-                }
+                },
             )
         }
 
@@ -81,18 +81,18 @@ fun ListPickerDropdown(
                             painter = painterResource(Res.drawable.ic_add),
                             contentDescription = null,
                             modifier = Modifier.size(20.dp),
-                            colorFilter = ColorFilter.tint(Color(0xFF1976D2))
+                            colorFilter = ColorFilter.tint(Color(0xFF1976D2)),
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
                             text = "Add New List",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFF1976D2)
+                            color = Color(0xFF1976D2),
                         )
                     }
                 },
-                onClick = onAddListClick
+                onClick = onAddListClick,
             )
         }
     }
@@ -106,14 +106,14 @@ fun ListPickerDropdownPreview() {
             shoppingLists = listOf(
                 ShoppingList("1", "Weekly Essentials", "🛒", "family_1", true),
                 ShoppingList("2", "Costco", "📦", "family_1"),
-                ShoppingList("3", "Indian Groceries", "🥘", "family_1")
+                ShoppingList("3", "Indian Groceries", "🥘", "family_1"),
             ),
             selectedList = ShoppingList("1", "Weekly Essentials", "🛒", "family_1", true),
             onListSelected = {},
             onAddListClick = {},
             isAdmin = true,
             expanded = true,
-            onDismissRequest = {}
+            onDismissRequest = {},
         )
     }
 }

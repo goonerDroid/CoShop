@@ -31,23 +31,20 @@ import com.sublime.coshop.data.models.FamilyMember
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun FamilyMembersSection(
-    familyMembers: List<FamilyMember>,
-    onAddMemberClick: () -> Unit = {}
-) {
+fun FamilyMembersSection(familyMembers: List<FamilyMember>, onAddMemberClick: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFFE3F2FD))
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(24.dp)
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             items(familyMembers) { member ->
                 FamilyMemberAvatar(
                     member = member,
-                    onAddClick = if (member.isAdmin) onAddMemberClick else null
+                    onAddClick = if (member.isAdmin) onAddMemberClick else null,
                 )
             }
         }
@@ -55,17 +52,14 @@ fun FamilyMembersSection(
 }
 
 @Composable
-fun FamilyMemberAvatar(
-    member: FamilyMember,
-    onAddClick: (() -> Unit)? = null
-) {
+fun FamilyMemberAvatar(member: FamilyMember, onAddClick: (() -> Unit)? = null) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(80.dp)
+        modifier = Modifier.width(80.dp),
     ) {
         Box(
             modifier = Modifier.size(72.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             if (member.isCurrentUser) {
                 Surface(
@@ -77,10 +71,10 @@ fun FamilyMemberAvatar(
                         brush = Brush.linearGradient(
                             colors = listOf(
                                 Color(0xFFE91E63),
-                                Color(0xFF9C27B0)
-                            )
-                        )
-                    )
+                                Color(0xFF9C27B0),
+                            ),
+                        ),
+                    ),
                 ) {}
             }
 
@@ -88,14 +82,14 @@ fun FamilyMemberAvatar(
                 modifier = Modifier
                     .size(if (member.isCurrentUser) 62.dp else 64.dp),
                 shape = CircleShape,
-                color = member.color
+                color = member.color,
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Text(
                         text = member.initial,
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp
+                        fontSize = 24.sp,
                     )
                 }
             }
@@ -108,14 +102,14 @@ fun FamilyMemberAvatar(
                         .clickable { onAddClick() },
                     shape = CircleShape,
                     color = Color.White,
-                    border = BorderStroke(1.dp, Color(0xFFE0E0E0))
+                    border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             text = "+",
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
+                            fontSize = 16.sp,
                         )
                     }
                 }
@@ -128,7 +122,7 @@ fun FamilyMemberAvatar(
             text = if (member.isCurrentUser) "You" else member.name,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
-            color = Color(0xFF212121)
+            color = Color(0xFF212121),
         )
 
         Text(
@@ -136,7 +130,7 @@ fun FamilyMemberAvatar(
             fontSize = 12.sp,
             color = Color(0xFF9E9E9E),
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -154,7 +148,7 @@ fun FamilyMembersCardPreview() {
                     Color(0xFF2196F3),
                     isCurrentUser = true,
                     isAdmin = true,
-                    lastCheckedItemName = "Organic Apples"
+                    lastCheckedItemName = "Organic Apples",
                 ),
                 FamilyMember(
                     "2",
@@ -163,7 +157,7 @@ fun FamilyMembersCardPreview() {
                     Color(0xFFE53935),
                     isCurrentUser = false,
                     isAdmin = false,
-                    lastCheckedItemName = "Whole Milk"
+                    lastCheckedItemName = "Whole Milk",
                 ),
                 FamilyMember(
                     "3",
@@ -172,10 +166,10 @@ fun FamilyMembersCardPreview() {
                     Color(0xFF4CAF50),
                     isCurrentUser = false,
                     isAdmin = false,
-                    lastCheckedItemName = null
-                )
+                    lastCheckedItemName = null,
+                ),
             ),
-            onAddMemberClick = {}
+            onAddMemberClick = {},
         )
     }
 }
@@ -192,9 +186,9 @@ fun FamilyMemberAvatarAdminPreview() {
                 Color(0xFF2196F3),
                 isCurrentUser = true,
                 isAdmin = true,
-                lastCheckedItemName = "Organic Apples"
+                lastCheckedItemName = "Organic Apples",
             ),
-            onAddClick = {}
+            onAddClick = {},
         )
     }
 }
@@ -211,9 +205,9 @@ fun FamilyMemberAvatarNonAdminPreview() {
                 Color(0xFFE53935),
                 isCurrentUser = false,
                 isAdmin = false,
-                lastCheckedItemName = "Organic Apples"
+                lastCheckedItemName = "Organic Apples",
             ),
-            onAddClick = null
+            onAddClick = null,
         )
     }
 }

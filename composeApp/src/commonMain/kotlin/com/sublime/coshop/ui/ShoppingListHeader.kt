@@ -27,7 +27,7 @@ fun ShoppingListHeader(
     allCount: Int,
     mineCount: Int,
     activeCount: Int,
-    doneCount: Int
+    doneCount: Int,
 ) {
     Row(
         modifier = Modifier
@@ -35,35 +35,35 @@ fun ShoppingListHeader(
             .background(Color(0xFFF5F5F5))
             .horizontalScroll(rememberScrollState())
             .padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         FilterTabItem(
             tab = FilterTab.ALL,
             icon = Res.drawable.ic_list,
             count = allCount,
             isSelected = selectedTab == FilterTab.ALL,
-            onClick = { onTabSelected(FilterTab.ALL) }
+            onClick = { onTabSelected(FilterTab.ALL) },
         )
         FilterTabItem(
             tab = FilterTab.MINE,
             icon = Res.drawable.ic_person,
             count = mineCount,
             isSelected = selectedTab == FilterTab.MINE,
-            onClick = { onTabSelected(FilterTab.MINE) }
+            onClick = { onTabSelected(FilterTab.MINE) },
         )
         FilterTabItem(
             tab = FilterTab.ACTIVE,
             icon = Res.drawable.ic_circle,
             count = activeCount,
             isSelected = selectedTab == FilterTab.ACTIVE,
-            onClick = { onTabSelected(FilterTab.ACTIVE) }
+            onClick = { onTabSelected(FilterTab.ACTIVE) },
         )
         FilterTabItem(
             tab = FilterTab.DONE,
             icon = Res.drawable.ic_check_circle,
             count = doneCount,
             isSelected = selectedTab == FilterTab.DONE,
-            onClick = { onTabSelected(FilterTab.DONE) }
+            onClick = { onTabSelected(FilterTab.DONE) },
         )
     }
 }
@@ -78,7 +78,7 @@ fun ShoppingListHeaderPreview() {
             allCount = 5,
             mineCount = 3,
             activeCount = 4,
-            doneCount = 1
+            doneCount = 1,
         )
     }
 }
@@ -93,7 +93,7 @@ fun ShoppingListHeaderMineSelectedPreview() {
             allCount = 5,
             mineCount = 3,
             activeCount = 4,
-            doneCount = 1
+            doneCount = 1,
         )
     }
 }

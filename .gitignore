@@ -34,3 +34,4 @@ iosApp/Pods/
 iosApp/.appcode_settings/
 iosApp/*.xcworkspace
 iosApp/xcuserdata/
+/.claude/settings.local.json

@@ -37,10 +37,7 @@ private val presetEmojis = listOf("🛒", "🥘", "📦", "🏪", "🥬", "🧹"
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun AddListDialog(
-    onDismiss: () -> Unit,
-    onConfirm: (name: String, emoji: String) -> Unit
-) {
+fun AddListDialog(onDismiss: () -> Unit, onConfirm: (name: String, emoji: String) -> Unit) {
     var listName by remember { mutableStateOf("") }
     var selectedEmoji by remember { mutableStateOf("🛒") }
 
@@ -50,7 +47,7 @@ fun AddListDialog(
             Text(
                 text = "Create New List",
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+                fontSize = 20.sp,
             )
         },
         text = {
@@ -62,7 +59,7 @@ fun AddListDialog(
                     placeholder = { Text("e.g., Costco, Weekly Essentials") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -71,14 +68,14 @@ fun AddListDialog(
                     text = "Choose an icon",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF757575)
+                    color = Color(0xFF757575),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     presetEmojis.forEach { emoji ->
                         val isSelected = emoji == selectedEmoji
@@ -87,19 +84,19 @@ fun AddListDialog(
                                 .size(44.dp)
                                 .clip(CircleShape)
                                 .background(
-                                    if (isSelected) Color(0xFFE3F2FD) else Color(0xFFF5F5F5)
+                                    if (isSelected) Color(0xFFE3F2FD) else Color(0xFFF5F5F5),
                                 )
                                 .border(
                                     width = if (isSelected) 2.dp else 0.dp,
                                     color = if (isSelected) Color(0xFF1976D2) else Color.Transparent,
-                                    shape = CircleShape
+                                    shape = CircleShape,
                                 )
                                 .clickable { selectedEmoji = emoji },
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 text = emoji,
-                                fontSize = 20.sp
+                                fontSize = 20.sp,
                             )
                         }
                     }
@@ -109,12 +106,12 @@ fun AddListDialog(
         confirmButton = {
             TextButton(
                 onClick = { onConfirm(listName, selectedEmoji) },
-                enabled = listName.isNotBlank()
+                enabled = listName.isNotBlank(),
             ) {
                 Text(
                     text = "Create",
                     color = if (listName.isNotBlank()) Color(0xFF1976D2) else Color(0xFFBDBDBD),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
         },
@@ -122,10 +119,10 @@ fun AddListDialog(
             TextButton(onClick = onDismiss) {
                 Text(
                     text = "Cancel",
-                    color = Color(0xFF757575)
+                    color = Color(0xFF757575),
                 )
             }
-        }
+        },
     )
 }
 
@@ -135,7 +132,7 @@ fun AddListDialogPreview() {
     MaterialTheme {
         AddListDialog(
             onDismiss = {},
-            onConfirm = { _, _ -> }
+            onConfirm = { _, _ -> },
         )
     }
 }

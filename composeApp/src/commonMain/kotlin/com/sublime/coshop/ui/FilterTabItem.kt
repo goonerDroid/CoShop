@@ -32,29 +32,23 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun FilterTabItem(
-    tab: FilterTab,
-    icon: DrawableResource,
-    count: Int,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
+fun FilterTabItem(tab: FilterTab, icon: DrawableResource, count: Int, isSelected: Boolean, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .clickable(onClick = onClick)
             .padding(horizontal = 8.dp, vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(icon),
                 contentDescription = tab.displayName,
                 modifier = Modifier.size(18.dp),
                 colorFilter = ColorFilter.tint(
-                    if (isSelected) Color(0xFF1976D2) else Color(0xFF757575)
-                )
+                    if (isSelected) Color(0xFF1976D2) else Color(0xFF757575),
+                ),
             )
 
             Spacer(modifier = Modifier.width(4.dp))
@@ -63,21 +57,21 @@ fun FilterTabItem(
                 text = tab.displayName,
                 fontSize = 14.sp,
                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                color = if (isSelected) Color(0xFF1976D2) else Color(0xFF757575)
+                color = if (isSelected) Color(0xFF1976D2) else Color(0xFF757575),
             )
 
             Spacer(modifier = Modifier.width(4.dp))
 
             Surface(
                 shape = RoundedCornerShape(10.dp),
-                color = if (isSelected) Color(0xFF1976D2).copy(alpha = 0.1f) else Color(0xFFF5F5F5)
+                color = if (isSelected) Color(0xFF1976D2).copy(alpha = 0.1f) else Color(0xFFF5F5F5),
             ) {
                 Text(
                     text = count.toString(),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     color = if (isSelected) Color(0xFF1976D2) else Color(0xFF9E9E9E),
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
                 )
             }
         }
@@ -90,8 +84,8 @@ fun FilterTabItem(
                 .height(3.dp)
                 .background(
                     color = if (isSelected) Color(0xFF1976D2) else Color.Transparent,
-                    shape = RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp)
-                )
+                    shape = RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp),
+                ),
         )
     }
 }
@@ -105,7 +99,7 @@ fun FilterTabItemSelectedPreview() {
             icon = Res.drawable.ic_list,
             count = 5,
             isSelected = true,
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -119,7 +113,7 @@ fun FilterTabItemUnselectedPreview() {
             icon = Res.drawable.ic_circle,
             count = 4,
             isSelected = false,
-            onClick = {}
+            onClick = {},
         )
     }
 }

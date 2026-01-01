@@ -50,7 +50,7 @@ fun HeaderSection(
     currentList: ShoppingList? = null,
     shoppingLists: List<ShoppingList> = emptyList(),
     onListSelected: (ShoppingList) -> Unit = {},
-    onAddListClick: () -> Unit = {}
+    onAddListClick: () -> Unit = {},
 ) {
     var showListPicker by remember { mutableStateOf(false) }
 
@@ -61,24 +61,24 @@ fun HeaderSection(
         Column(
             modifier = Modifier
                 .statusBarsPadding()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box {
                     Surface(
                         modifier = Modifier.size(48.dp),
                         shape = CircleShape,
-                        color = currentUser.color
+                        color = currentUser.color,
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(
                                 text = currentUser.initial,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp
+                                fontSize = 20.sp,
                             )
                         }
                     }
@@ -89,13 +89,13 @@ fun HeaderSection(
                                 .size(20.dp)
                                 .align(Alignment.BottomEnd),
                             shape = CircleShape,
-                            color = Color(0xFFFFC107)
+                            color = Color(0xFFFFC107),
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Image(
                                     painter = painterResource(Res.drawable.ic_crown),
                                     contentDescription = "Admin",
-                                    modifier = Modifier.padding(2.dp)
+                                    modifier = Modifier.padding(2.dp),
                                 )
                             }
                         }
@@ -110,19 +110,19 @@ fun HeaderSection(
                             text = family.name,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF212121)
+                            color = Color(0xFF212121),
                         )
                         Row(
                             modifier = Modifier
                                 .clickable(enabled = shoppingLists.isNotEmpty()) {
                                     showListPicker = true
                                 },
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = currentList?.let { "${it.emoji} ${it.name}" } ?: family.subtitle,
                                 fontSize = 14.sp,
-                                color = Color(0xFF757575)
+                                color = Color(0xFF757575),
                             )
                             if (shoppingLists.isNotEmpty()) {
                                 Spacer(modifier = Modifier.width(4.dp))
@@ -130,7 +130,7 @@ fun HeaderSection(
                                     painter = painterResource(Res.drawable.ic_chevron_down),
                                     contentDescription = "Select list",
                                     modifier = Modifier.size(16.dp),
-                                    colorFilter = ColorFilter.tint(Color(0xFF757575))
+                                    colorFilter = ColorFilter.tint(Color(0xFF757575)),
                                 )
                             }
                         }
@@ -150,7 +150,7 @@ fun HeaderSection(
                             },
                             isAdmin = currentUser.isAdmin,
                             expanded = showListPicker,
-                            onDismissRequest = { showListPicker = false }
+                            onDismissRequest = { showListPicker = false },
                         )
                     }
                 }
@@ -161,17 +161,17 @@ fun HeaderSection(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "Progress",
                     fontSize = 14.sp,
-                    color = Color(0xFF757575)
+                    color = Color(0xFF757575),
                 )
                 Text(
                     text = "$completedCount of $totalCount items",
                     fontSize = 14.sp,
-                    color = Color(0xFF757575)
+                    color = Color(0xFF757575),
                 )
             }
 
@@ -184,7 +184,7 @@ fun HeaderSection(
                     .height(8.dp)
                     .clip(RoundedCornerShape(4.dp)),
                 color = Color(0xFF1976D2),
-                trackColor = Color(0xFFBBDEFB)
+                trackColor = Color(0xFFBBDEFB),
             )
         }
     }
@@ -196,14 +196,14 @@ fun HeaderSectionPreview() {
     val shoppingLists = listOf(
         ShoppingList("1", "Weekly Essentials", "🛒", "family_1", true),
         ShoppingList("2", "Costco", "📦", "family_1"),
-        ShoppingList("3", "Indian Groceries", "🥘", "family_1")
+        ShoppingList("3", "Indian Groceries", "🥘", "family_1"),
     )
     MaterialTheme {
         HeaderSection(
             family = Family(
                 id = "1",
                 name = "Family Grocery",
-                subtitle = "Shopping together"
+                subtitle = "Shopping together",
             ),
             currentUser = FamilyMember(
                 id = "user_1",
@@ -212,14 +212,14 @@ fun HeaderSectionPreview() {
                 color = Color(0xFF2196F3),
                 isCurrentUser = true,
                 isAdmin = true,
-                lastCheckedItemName = "Organic Apples"
+                lastCheckedItemName = "Organic Apples",
             ),
             completedCount = 2,
             totalCount = 5,
             currentList = shoppingLists.first(),
             shoppingLists = shoppingLists,
             onListSelected = {},
-            onAddListClick = {}
+            onAddListClick = {},
         )
     }
 }
@@ -229,14 +229,14 @@ fun HeaderSectionPreview() {
 fun HeaderSectionNonAdminPreview() {
     val shoppingLists = listOf(
         ShoppingList("1", "Weekly Essentials", "🛒", "family_1", true),
-        ShoppingList("2", "Costco", "📦", "family_1")
+        ShoppingList("2", "Costco", "📦", "family_1"),
     )
     MaterialTheme {
         HeaderSection(
             family = Family(
                 id = "1",
                 name = "Smith Family",
-                subtitle = "Shopping together"
+                subtitle = "Shopping together",
             ),
             currentUser = FamilyMember(
                 id = "user_2",
@@ -245,14 +245,14 @@ fun HeaderSectionNonAdminPreview() {
                 color = Color(0xFFE91E63),
                 isCurrentUser = true,
                 isAdmin = false,
-                lastCheckedItemName = "Whole Milk"
+                lastCheckedItemName = "Whole Milk",
             ),
             completedCount = 4,
             totalCount = 6,
             currentList = shoppingLists.first(),
             shoppingLists = shoppingLists,
             onListSelected = {},
-            onAddListClick = {}
+            onAddListClick = {},
         )
     }
 }

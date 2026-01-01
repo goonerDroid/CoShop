@@ -1,10 +1,5 @@
 package com.sublime.coshop.viewmodels
 
-import com.sublime.coshop.data.models.ShoppingItem
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-
 class ShoppingListViewModel {
 
 //    private val _items = MutableStateFlow(

@@ -19,19 +19,17 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun EmptyListState(
-    modifier: Modifier = Modifier
-) {
+fun EmptyListState(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
             text = "🛒",
-            fontSize = 72.sp
+            fontSize = 72.sp,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -40,7 +38,7 @@ fun EmptyListState(
             text = "No items yet",
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF212121)
+            color = Color(0xFF212121),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -49,7 +47,7 @@ fun EmptyListState(
             text = "Tap the + button to add your first item",
             fontSize = 14.sp,
             color = Color(0xFF757575),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
