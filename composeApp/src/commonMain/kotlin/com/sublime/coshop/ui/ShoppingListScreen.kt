@@ -13,86 +13,45 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.sublime.coshop.data.MockData
-import com.sublime.coshop.data.models.FilterTab
-import com.sublime.coshop.data.models.ShoppingItem
-import com.sublime.coshop.data.models.ShoppingList
+import com.sublime.coshop.ui.theme.CoShopColors
+import com.sublime.coshop.viewmodels.ShoppingListViewModel
 import coshop.composeapp.generated.resources.Res
 import coshop.composeapp.generated.resources.ic_add
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.random.Random
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShoppingListScreen() {
+fun ShoppingListScreen(viewModel: ShoppingListViewModel = remember { ShoppingListViewModel() }) {
     val family = MockData.family
     val familyMembers = MockData.familyMembers
-    var shoppingLists by remember { mutableStateOf(MockData.shoppingLists) }
-    val currentUserId = MockData.currentUserId
+    val currentUser = remember(familyMembers) { familyMembers.first { it.isCurrentUser } }
 
-    var selectedListId by remember {
-        mutableStateOf(shoppingLists.first { it.isDefault }.id)
-    }
-
-    val currentList = remember(selectedListId, shoppingLists) {
-        shoppingLists.first { it.id == selectedListId }
-    }
-
-    var showAddListDialog by remember { mutableStateOf(false) }
-    var showAddItemDialog by remember { mutableStateOf(false) }
-
-    var items by remember { mutableStateOf(MockData.shoppingItems) }
+    val uiState = viewModel.uiState.value
+    val shoppingLists = viewModel.shoppingLists.value
+    val currentList = viewModel.currentList.value
+    val filteredItems = viewModel.filteredItems.value
+    val completedCount = viewModel.completedCount.value
+    val totalCount = viewModel.totalCount.value
+    val allCount = viewModel.allCount.value
+    val mineCount = viewModel.mineCount.value
+    val activeCount = viewModel.activeCount.value
+    val doneCount = viewModel.doneCount.value
 
     val memberNameById = remember(familyMembers) {
         familyMembers.associate { it.id to it.name }
     }
 
-    var selectedTab by remember { mutableStateOf(FilterTab.ALL) }
-
-    val currentUser = remember(familyMembers) { familyMembers.first { it.isCurrentUser } }
-
-    val itemsForCurrentList by remember {
-        derivedStateOf { items.filter { it.listId == selectedListId } }
-    }
-
-    val completedCount by remember { derivedStateOf { itemsForCurrentList.count { it.isDone } } }
-    val totalCount by remember { derivedStateOf { itemsForCurrentList.size } }
-
-    val allCount by remember { derivedStateOf { itemsForCurrentList.size } }
-    val mineCount by remember { derivedStateOf { itemsForCurrentList.count { it.assignedUser == currentUserId } } }
-    val activeCount by remember { derivedStateOf { itemsForCurrentList.count { !it.isDone } } }
-    val doneCount by remember { derivedStateOf { itemsForCurrentList.count { it.isDone } } }
-
-    val filteredItems = when (selectedTab) {
-        FilterTab.ALL -> itemsForCurrentList
-        FilterTab.MINE -> itemsForCurrentList.filter { it.assignedUser == currentUserId }
-        FilterTab.ACTIVE -> itemsForCurrentList.filter { !it.isDone }
-        FilterTab.DONE -> itemsForCurrentList.filter { it.isDone }
-    }
-
-    val onItemCheckedChange = remember<(String, Boolean) -> Unit> {
-        { itemId, checked ->
-            items = items.map {
-                if (it.id == itemId) it.copy(isDone = checked) else it
-            }
-        }
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)),
+            .background(CoShopColors.Background),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             HeaderSection(
@@ -102,8 +61,8 @@ fun ShoppingListScreen() {
                 totalCount = totalCount,
                 currentList = currentList,
                 shoppingLists = shoppingLists,
-                onListSelected = { list -> selectedListId = list.id },
-                onAddListClick = { showAddListDialog = true },
+                onListSelected = { list -> viewModel.selectList(list.id) },
+                onAddListClick = { viewModel.showAddListDialog() },
             )
 
             LazyColumn(
@@ -112,14 +71,14 @@ fun ShoppingListScreen() {
                 item {
                     FamilyMembersSection(
                         familyMembers = familyMembers,
-                        onAddMemberClick = { /* TODO */ },
+                        onAddMemberClick = { /* TODO: Phase 4 */ },
                     )
                 }
 
                 stickyHeader {
                     ShoppingListHeader(
-                        selectedTab = selectedTab,
-                        onTabSelected = { selectedTab = it },
+                        selectedTab = uiState.selectedTab,
+                        onTabSelected = { viewModel.selectTab(it) },
                         allCount = allCount,
                         mineCount = mineCount,
                         activeCount = activeCount,
@@ -138,7 +97,7 @@ fun ShoppingListScreen() {
                         ShoppingItemCard(
                             item = item,
                             assignedMemberName = memberNameById[item.assignedUser] ?: "Unknown",
-                            onCheckedChange = { checked -> onItemCheckedChange(item.id, checked) },
+                            onCheckedChange = { checked -> viewModel.toggleItemDone(item.id, checked) },
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                         )
                     }
@@ -147,58 +106,54 @@ fun ShoppingListScreen() {
         }
 
         FloatingActionButton(
-            onClick = { showAddItemDialog = true },
+            onClick = { viewModel.showAddItemDialog() },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
             shape = CircleShape,
-            containerColor = Color(0xFF1976D2),
-            contentColor = Color.White,
+            containerColor = CoShopColors.Primary,
+            contentColor = CoShopColors.Surface,
         ) {
             Image(
                 painter = painterResource(Res.drawable.ic_add),
                 contentDescription = "Add item",
-                colorFilter = ColorFilter.tint(Color.White),
+                colorFilter = ColorFilter.tint(CoShopColors.Surface),
             )
         }
     }
 
-    if (showAddListDialog) {
+    // Dialogs
+    if (uiState.showAddListDialog) {
         AddListDialog(
-            onDismiss = { showAddListDialog = false },
+            onDismiss = { viewModel.hideAddListDialog() },
             onConfirm = { name, emoji ->
-                val newList = ShoppingList(
-                    id = "list_${kotlin.random.Random.nextInt(10000, 99999)}",
-                    name = name,
-                    emoji = emoji,
-                    familyId = family.id,
-                    isDefault = false,
-                )
-                shoppingLists = shoppingLists + newList
-                selectedListId = newList.id
-                showAddListDialog = false
+                viewModel.addList(name, emoji, family.id)
             },
         )
     }
 
-    if (showAddItemDialog) {
+    if (uiState.showAddItemDialog) {
         AddItemDialog(
             familyMembers = familyMembers,
-            onDismiss = { showAddItemDialog = false },
+            onDismiss = { viewModel.hideAddItemDialog() },
             onConfirm = { name, quantity, category, assignedUserId ->
-                val newItem = ShoppingItem(
-                    id = "item_${Random.nextInt(10000, 99999)}",
-                    name = name,
-                    quantity = quantity,
-                    category = category,
-                    assignedUser = assignedUserId,
-                    isDone = false,
-                    listId = selectedListId,
-                )
-                items = items + newItem
-                showAddItemDialog = false
+                viewModel.addOrCheckDuplicateItem(name, quantity, category, assignedUserId)
             },
         )
+    }
+
+    if (uiState.showDuplicateDialog) {
+        val duplicate = uiState.duplicateItem
+        val pending = uiState.pendingItem
+
+        if (duplicate != null && pending != null) {
+            DuplicateItemDialog(
+                existingItem = duplicate,
+                existingAssigneeName = memberNameById[duplicate.assignedUser] ?: "Unknown",
+                newAssigneeName = memberNameById[pending.assignedUserId] ?: "Unknown",
+                onAction = { action -> viewModel.handleDuplicateAction(action) },
+            )
+        }
     }
 }
 

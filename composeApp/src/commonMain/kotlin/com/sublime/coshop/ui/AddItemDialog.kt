@@ -181,13 +181,14 @@ fun AddItemDialog(
             }
         },
         confirmButton = {
+            val isFormValid = itemName.isNotBlank() && quantity.isNotBlank()
             TextButton(
                 onClick = { onConfirm(itemName, quantity, selectedCategory, selectedMemberId) },
-                enabled = itemName.isNotBlank(),
+                enabled = isFormValid,
             ) {
                 Text(
                     text = "Add",
-                    color = if (itemName.isNotBlank()) Color(0xFF1976D2) else Color(0xFFBDBDBD),
+                    color = if (isFormValid) Color(0xFF1976D2) else Color(0xFFBDBDBD),
                     fontWeight = FontWeight.SemiBold,
                 )
             }
