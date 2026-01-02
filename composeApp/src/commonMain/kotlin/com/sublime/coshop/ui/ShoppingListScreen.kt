@@ -41,6 +41,7 @@ fun ShoppingListScreen(viewModel: ShoppingListViewModel = remember { ShoppingLis
     val totalCount = viewModel.totalCount.value
     val allCount = viewModel.allCount.value
     val mineCount = viewModel.mineCount.value
+    val mineTotalCount = viewModel.mineTotalCount.value
     val activeCount = viewModel.activeCount.value
     val doneCount = viewModel.doneCount.value
 
@@ -84,7 +85,9 @@ fun ShoppingListScreen(viewModel: ShoppingListViewModel = remember { ShoppingLis
                         selectedTab = uiState.selectedTab,
                         onTabSelected = { viewModel.selectTab(it) },
                         allCount = allCount,
+                        allTotalCount = totalCount,
                         mineCount = mineCount,
+                        mineTotalCount = mineTotalCount,
                         activeCount = activeCount,
                         doneCount = doneCount,
                     )

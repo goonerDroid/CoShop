@@ -55,10 +55,14 @@ class ShoppingListViewModel {
     }
 
     val allCount = derivedStateOf {
-        itemsForCurrentList.value.size
+        itemsForCurrentList.value.count { !it.isDone }
     }
 
     val mineCount = derivedStateOf {
+        itemsForCurrentList.value.count { it.assignedUser == MockData.currentUserId && !it.isDone }
+    }
+
+    val mineTotalCount = derivedStateOf {
         itemsForCurrentList.value.count { it.assignedUser == MockData.currentUserId }
     }
 

@@ -34,7 +34,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun FilterTabItem(tab: FilterTab, icon: DrawableResource, count: Int, isSelected: Boolean, onClick: () -> Unit) {
+fun FilterTabItem(tab: FilterTab, icon: DrawableResource, count: Int, totalCount: Int? = null, isSelected: Boolean, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .clickable(
@@ -72,13 +72,25 @@ fun FilterTabItem(tab: FilterTab, icon: DrawableResource, count: Int, isSelected
                 shape = RoundedCornerShape(10.dp),
                 color = if (isSelected) Color(0xFF1976D2).copy(alpha = 0.1f) else Color(0xFFF5F5F5),
             ) {
-                Text(
-                    text = count.toString(),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = if (isSelected) Color(0xFF1976D2) else Color(0xFF9E9E9E),
+                Row(
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                )
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = count.toString(),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = if (isSelected) Color(0xFF1976D2) else Color(0xFF9E9E9E),
+                    )
+                    if (totalCount != null) {
+                        Text(
+                            text = "/$totalCount",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = if (isSelected) Color(0xFF1976D2).copy(alpha = 0.6f) else Color(0xFFBDBDBD),
+                        )
+                    }
+                }
             }
         }
 
@@ -104,6 +116,7 @@ fun FilterTabItemSelectedPreview() {
             tab = FilterTab.ALL,
             icon = Res.drawable.ic_list,
             count = 5,
+            totalCount = 8,
             isSelected = true,
             onClick = {},
         )

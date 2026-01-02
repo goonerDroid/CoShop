@@ -25,7 +25,9 @@ fun ShoppingListHeader(
     selectedTab: FilterTab,
     onTabSelected: (FilterTab) -> Unit,
     allCount: Int,
+    allTotalCount: Int,
     mineCount: Int,
+    mineTotalCount: Int,
     activeCount: Int,
     doneCount: Int,
 ) {
@@ -41,6 +43,7 @@ fun ShoppingListHeader(
             tab = FilterTab.ALL,
             icon = Res.drawable.ic_list,
             count = allCount,
+            totalCount = allTotalCount,
             isSelected = selectedTab == FilterTab.ALL,
             onClick = { onTabSelected(FilterTab.ALL) },
         )
@@ -48,6 +51,7 @@ fun ShoppingListHeader(
             tab = FilterTab.MINE,
             icon = Res.drawable.ic_person,
             count = mineCount,
+            totalCount = mineTotalCount,
             isSelected = selectedTab == FilterTab.MINE,
             onClick = { onTabSelected(FilterTab.MINE) },
         )
@@ -76,9 +80,11 @@ fun ShoppingListHeaderPreview() {
             selectedTab = FilterTab.ALL,
             onTabSelected = {},
             allCount = 5,
+            allTotalCount = 8,
             mineCount = 3,
-            activeCount = 4,
-            doneCount = 1,
+            mineTotalCount = 5,
+            activeCount = 5,
+            doneCount = 3,
         )
     }
 }
@@ -91,9 +97,11 @@ fun ShoppingListHeaderMineSelectedPreview() {
             selectedTab = FilterTab.MINE,
             onTabSelected = {},
             allCount = 5,
+            allTotalCount = 8,
             mineCount = 3,
-            activeCount = 4,
-            doneCount = 1,
+            mineTotalCount = 5,
+            activeCount = 5,
+            doneCount = 3,
         )
     }
 }
