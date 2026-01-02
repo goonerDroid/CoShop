@@ -34,7 +34,13 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ShoppingItemCard(item: ShoppingItem, assignedMemberName: String, onCheckedChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {
+fun ShoppingItemCard(
+    item: ShoppingItem,
+    assignedMemberName: String,
+    assignedMemberColor: Color? = null,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val checkboxColors = CheckboxDefaults.colors(
         checkedColor = Color(0xFF1976D2),
         uncheckedColor = Color(0xFFBDBDBD),
@@ -82,12 +88,8 @@ fun ShoppingItemCard(item: ShoppingItem, assignedMemberName: String, onCheckedCh
                         textDecoration = if (item.isDone) TextDecoration.LineThrough else TextDecoration.None,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false),
+                        modifier = Modifier.weight(1f),
                     )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    CategoryBadge(category = item.category)
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -105,7 +107,7 @@ fun ShoppingItemCard(item: ShoppingItem, assignedMemberName: String, onCheckedCh
                         painter = painterResource(Res.drawable.ic_group),
                         contentDescription = "Assigned to",
                         modifier = Modifier.size(16.dp),
-                        colorFilter = ColorFilter.tint(Color(0xFF9E9E9E)),
+                        colorFilter = ColorFilter.tint(assignedMemberColor?.copy(alpha = 0.6f) ?: Color(0xFF9E9E9E)),
                     )
 
                     Spacer(modifier = Modifier.width(4.dp))
@@ -113,8 +115,12 @@ fun ShoppingItemCard(item: ShoppingItem, assignedMemberName: String, onCheckedCh
                     Text(
                         text = assignedMemberName,
                         fontSize = 14.sp,
-                        color = Color(0xFF757575),
+                        color = assignedMemberColor?.copy(alpha = 0.7f) ?: Color(0xFF757575),
                     )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    CategoryBadge(category = item.category)
                 }
             }
         }
@@ -135,6 +141,7 @@ fun ShoppingItemCardActivePreview() {
                 isDone = false,
             ),
             assignedMemberName = "John",
+            assignedMemberColor = Color(0xFF2196F3),
             onCheckedChange = {},
         )
     }
@@ -154,6 +161,7 @@ fun ShoppingItemCardDonePreview() {
                 isDone = true,
             ),
             assignedMemberName = "John",
+            assignedMemberColor = Color(0xFF2196F3),
             onCheckedChange = {},
         )
     }
@@ -173,6 +181,7 @@ fun ShoppingItemCardLongNamePreview() {
                 isDone = false,
             ),
             assignedMemberName = "Jane",
+            assignedMemberColor = Color(0xFFE53935),
             onCheckedChange = {},
         )
     }

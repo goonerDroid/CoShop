@@ -75,11 +75,11 @@ fun DuplicateItemDialog(
                 }
 
                 TextButton(
-                    onClick = { onAction(DuplicateAction.INCREASE_QUANTITY) },
+                    onClick = { onAction(DuplicateAction.UPDATE_QUANTITY) },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = "Increase quantity",
+                        text = "Update quantity",
                         color = Color(0xFF1976D2),
                         fontWeight = FontWeight.Medium,
                     )

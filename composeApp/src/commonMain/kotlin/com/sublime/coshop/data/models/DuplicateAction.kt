@@ -2,7 +2,7 @@ package com.sublime.coshop.data.models
 
 enum class DuplicateAction {
     REASSIGN,
-    INCREASE_QUANTITY,
+    UPDATE_QUANTITY,
     ADD_SEPARATE,
     CANCEL,
 }

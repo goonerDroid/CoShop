@@ -1,6 +1,7 @@
 package com.sublime.coshop.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -100,7 +101,11 @@ fun AddItemDialog(
                         val isSelected = category == selectedCategory
                         Surface(
                             modifier = Modifier
-                                .clickable { selectedCategory = category },
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                    onClick = { selectedCategory = category },
+                                ),
                             shape = RoundedCornerShape(20.dp),
                             color = if (isSelected) category.color.copy(alpha = 0.15f) else Color(0xFFF5F5F5),
                             border = androidx.compose.foundation.BorderStroke(
@@ -146,7 +151,11 @@ fun AddItemDialog(
                         val isSelected = member.id == selectedMemberId
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.clickable { selectedMemberId = member.id },
+                            modifier = Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { selectedMemberId = member.id },
+                            ),
                         ) {
                             Box {
                                 Surface(

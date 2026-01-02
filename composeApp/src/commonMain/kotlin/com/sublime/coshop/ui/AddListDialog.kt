@@ -3,6 +3,7 @@ package com.sublime.coshop.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -91,7 +92,11 @@ fun AddListDialog(onDismiss: () -> Unit, onConfirm: (name: String, emoji: String
                                     color = if (isSelected) Color(0xFF1976D2) else Color.Transparent,
                                     shape = CircleShape,
                                 )
-                                .clickable { selectedEmoji = emoji },
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                    onClick = { selectedEmoji = emoji },
+                                ),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(

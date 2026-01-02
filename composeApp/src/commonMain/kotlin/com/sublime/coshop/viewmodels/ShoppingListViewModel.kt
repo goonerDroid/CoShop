@@ -193,7 +193,7 @@ class ShoppingListViewModel {
                 hideDuplicateDialog()
             }
 
-            DuplicateAction.INCREASE_QUANTITY -> {
+            DuplicateAction.UPDATE_QUANTITY -> {
                 _items.value = _items.value.map {
                     if (it.id == duplicate.id) {
                         it.copy(quantity = pending.quantity.ifBlank { it.quantity })

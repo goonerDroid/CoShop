@@ -48,6 +48,10 @@ fun ShoppingListScreen(viewModel: ShoppingListViewModel = remember { ShoppingLis
         familyMembers.associate { it.id to it.name }
     }
 
+    val memberColorById = remember(familyMembers) {
+        familyMembers.associate { it.id to it.color }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -97,6 +101,7 @@ fun ShoppingListScreen(viewModel: ShoppingListViewModel = remember { ShoppingLis
                         ShoppingItemCard(
                             item = item,
                             assignedMemberName = memberNameById[item.assignedUser] ?: "Unknown",
+                            assignedMemberColor = memberColorById[item.assignedUser],
                             onCheckedChange = { checked -> viewModel.toggleItemDone(item.id, checked) },
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                         )
