@@ -15,28 +15,35 @@ import com.sublime.coshop.utils.IdGenerator
 import com.sublime.coshop.utils.ValidationUtils
 
 class ShoppingListViewModel {
-    // Data state
     private val _items = mutableStateOf(MockData.shoppingItems)
     val items: State<List<ShoppingItem>> = _items
 
     private val _shoppingLists = mutableStateOf(MockData.shoppingLists)
     val shoppingLists: State<List<ShoppingList>> = _shoppingLists
 
-    // UI state
     private val _uiState = mutableStateOf(
         ShoppingListUiState(
-            selectedListId = MockData.shoppingLists.first { it.isDefault }.id,
+            selectedListId = MockData.shoppingLists.firstOrNull { it.isDefault }?.id
+                ?: MockData.shoppingLists.firstOrNull()?.id
+                ?: "",
         ),
     )
     val uiState: State<ShoppingListUiState> = _uiState
 
-    // Derived states
     val itemsForCurrentList = derivedStateOf {
         _items.value.filter { it.listId == _uiState.value.selectedListId }
     }
 
     val currentList = derivedStateOf {
-        _shoppingLists.value.first { it.id == _uiState.value.selectedListId }
+        _shoppingLists.value.firstOrNull { it.id == _uiState.value.selectedListId }
+            ?: _shoppingLists.value.firstOrNull()
+            ?: ShoppingList(
+                id = "",
+                name = "No Lists",
+                emoji = "📝",
+                familyId = "",
+                isDefault = true,
+            )
     }
 
     val completedCount = derivedStateOf {
@@ -74,9 +81,11 @@ class ShoppingListViewModel {
         }
     }
 
-    // Actions
     fun selectList(listId: String) {
-        _uiState.value = _uiState.value.copy(selectedListId = listId)
+        // Only select if the list exists
+        if (_shoppingLists.value.any { it.id == listId }) {
+            _uiState.value = _uiState.value.copy(selectedListId = listId)
+        }
     }
 
     fun selectTab(tab: FilterTab) {
@@ -132,19 +141,16 @@ class ShoppingListViewModel {
         val normalizedName = ValidationUtils.normalizeItemName(name)
         val normalizedQuantity = ValidationUtils.normalizeQuantity(quantity)
 
-        // Validate inputs
         val nameValidation = ValidationUtils.validateItemName(normalizedName)
         val quantityValidation = ValidationUtils.validateQuantity(normalizedQuantity)
 
         if (!nameValidation.isValid || !quantityValidation.isValid) return
 
-        // Check for duplicates (case-insensitive, active items only)
         val existingItem = itemsForCurrentList.value.find {
             it.name.equals(normalizedName, ignoreCase = true) && !it.isDone
         }
 
         if (existingItem != null) {
-            // Show duplicate dialog
             _uiState.value = _uiState.value.copy(
                 showAddItemDialog = false,
                 showDuplicateDialog = true,
@@ -157,7 +163,6 @@ class ShoppingListViewModel {
                 ),
             )
         } else {
-            // No duplicate, add the item
             addItem(normalizedName, normalizedQuantity, category, assignedUserId)
             hideAddItemDialog()
         }
@@ -174,7 +179,6 @@ class ShoppingListViewModel {
 
         when (action) {
             DuplicateAction.REASSIGN -> {
-                // Reassign existing item to new user and update quantity/category
                 _items.value = _items.value.map {
                     if (it.id == duplicate.id) {
                         it.copy(
@@ -190,7 +194,6 @@ class ShoppingListViewModel {
             }
 
             DuplicateAction.INCREASE_QUANTITY -> {
-                // Keep existing assignment, just update quantity
                 _items.value = _items.value.map {
                     if (it.id == duplicate.id) {
                         it.copy(quantity = pending.quantity.ifBlank { it.quantity })
@@ -202,7 +205,6 @@ class ShoppingListViewModel {
             }
 
             DuplicateAction.ADD_SEPARATE -> {
-                // Add as a separate item
                 addItem(
                     pending.name,
                     pending.quantity,
@@ -224,7 +226,6 @@ class ShoppingListViewModel {
         }
     }
 
-    // Private helper functions
     private fun addItem(name: String, quantity: String, category: ItemCategory, assignedUserId: String) {
         val newItem = ShoppingItem(
             id = IdGenerator.generateItemId(),
