@@ -16,7 +16,12 @@ import com.sublime.coshop.data.models.ShoppingItem
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ShoppingItemsList(items: List<ShoppingItem>, familyMembers: List<FamilyMember>, onItemCheckedChange: (ShoppingItem, Boolean) -> Unit) {
+fun ShoppingItemsList(
+    items: List<ShoppingItem>,
+    familyMembers: List<FamilyMember>,
+    onItemCheckedChange: (ShoppingItem, Boolean) -> Unit,
+    onItemClick: (ShoppingItem) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(16.dp),
@@ -27,7 +32,9 @@ fun ShoppingItemsList(items: List<ShoppingItem>, familyMembers: List<FamilyMembe
             ShoppingItemCard(
                 item = item,
                 assignedMemberName = assignedMember?.name ?: "Unknown",
+                assignedMemberColor = assignedMember?.color,
                 onCheckedChange = { checked -> onItemCheckedChange(item, checked) },
+                onItemClick = { onItemClick(item) },
             )
         }
     }
@@ -67,6 +74,7 @@ fun ShoppingItemsListPreview() {
             items = items,
             familyMembers = familyMembers,
             onItemCheckedChange = { _, _ -> },
+            onItemClick = {},
         )
     }
 }

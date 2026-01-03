@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sublime.coshop.data.models.FamilyMember
 import com.sublime.coshop.data.models.ItemCategory
+import com.sublime.coshop.data.models.ShoppingItem
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -43,17 +44,18 @@ fun AddItemDialog(
     familyMembers: List<FamilyMember>,
     onDismiss: () -> Unit,
     onConfirm: (name: String, quantity: String, category: ItemCategory, assignedUserId: String) -> Unit,
+    editingItem: ShoppingItem? = null,
 ) {
-    var itemName by remember { mutableStateOf("") }
-    var quantity by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf(ItemCategory.PRODUCE) }
-    var selectedMemberId by remember { mutableStateOf(familyMembers.firstOrNull()?.id ?: "") }
+    var itemName by remember { mutableStateOf(editingItem?.name ?: "") }
+    var quantity by remember { mutableStateOf(editingItem?.quantity ?: "") }
+    var selectedCategory by remember { mutableStateOf(editingItem?.category ?: ItemCategory.PRODUCE) }
+    var selectedMemberId by remember { mutableStateOf(editingItem?.assignedUser ?: familyMembers.firstOrNull()?.id ?: "") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "Add Item",
+                text = if (editingItem != null) "Edit Item" else "Add Item",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
             )
@@ -196,7 +198,7 @@ fun AddItemDialog(
                 enabled = isFormValid,
             ) {
                 Text(
-                    text = "Add",
+                    text = if (editingItem != null) "Save" else "Add",
                     color = if (isFormValid) Color(0xFF1976D2) else Color(0xFFBDBDBD),
                     fontWeight = FontWeight.SemiBold,
                 )

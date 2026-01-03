@@ -1,6 +1,8 @@
 package com.sublime.coshop.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +42,7 @@ fun ShoppingItemCard(
     assignedMemberName: String,
     assignedMemberColor: Color? = null,
     onCheckedChange: (Boolean) -> Unit,
+    onItemClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val checkboxColors = CheckboxDefaults.colors(
@@ -75,7 +79,15 @@ fun ShoppingItemCard(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onItemClick,
+                    ),
+            ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
@@ -143,6 +155,7 @@ fun ShoppingItemCardActivePreview() {
             assignedMemberName = "John",
             assignedMemberColor = Color(0xFF2196F3),
             onCheckedChange = {},
+            onItemClick = {},
         )
     }
 }
@@ -163,6 +176,7 @@ fun ShoppingItemCardDonePreview() {
             assignedMemberName = "John",
             assignedMemberColor = Color(0xFF2196F3),
             onCheckedChange = {},
+            onItemClick = {},
         )
     }
 }
@@ -183,6 +197,7 @@ fun ShoppingItemCardLongNamePreview() {
             assignedMemberName = "Jane",
             assignedMemberColor = Color(0xFFE53935),
             onCheckedChange = {},
+            onItemClick = {},
         )
     }
 }

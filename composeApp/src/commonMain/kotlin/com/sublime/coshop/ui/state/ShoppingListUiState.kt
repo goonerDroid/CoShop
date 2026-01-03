@@ -11,8 +11,10 @@ data class ShoppingListUiState(
     val selectedTab: FilterTab = FilterTab.ALL,
     val showAddListDialog: Boolean = false,
     val showAddItemDialog: Boolean = false,
+    val showEditItemDialog: Boolean = false,
     val showDuplicateDialog: Boolean = false,
     val duplicateItem: ShoppingItem? = null,
+    val editingItem: ShoppingItem? = null,
     val pendingItem: PendingItem? = null,
 )
 

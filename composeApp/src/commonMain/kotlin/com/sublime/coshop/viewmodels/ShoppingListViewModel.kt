@@ -112,6 +112,20 @@ class ShoppingListViewModel {
         _uiState.value = _uiState.value.copy(showAddItemDialog = false)
     }
 
+    fun showEditItemDialog(item: ShoppingItem) {
+        _uiState.value = _uiState.value.copy(
+            showEditItemDialog = true,
+            editingItem = item,
+        )
+    }
+
+    fun hideEditItemDialog() {
+        _uiState.value = _uiState.value.copy(
+            showEditItemDialog = false,
+            editingItem = null,
+        )
+    }
+
     fun hideDuplicateDialog() {
         _uiState.value = _uiState.value.copy(
             showDuplicateDialog = false,
@@ -228,6 +242,44 @@ class ShoppingListViewModel {
         _items.value = _items.value.map {
             if (it.id == itemId) it.copy(isDone = isDone) else it
         }
+    }
+
+    fun editItem(itemId: String, name: String, quantity: String, category: ItemCategory, assignedUserId: String) {
+        val normalizedName = ValidationUtils.normalizeItemName(name)
+        val normalizedQuantity = ValidationUtils.normalizeQuantity(quantity)
+
+        val nameValidation = ValidationUtils.validateItemName(normalizedName)
+        val quantityValidation = ValidationUtils.validateQuantity(normalizedQuantity)
+
+        if (!nameValidation.isValid || !quantityValidation.isValid) return
+
+        val originalItem = _items.value.find { it.id == itemId }
+        if (originalItem == null) {
+            hideEditItemDialog()
+            return
+        }
+
+        updateItem(itemId, normalizedName, normalizedQuantity, category, assignedUserId)
+        hideEditItemDialog()
+    }
+
+    private fun updateItem(itemId: String, name: String, quantity: String, category: ItemCategory, assignedUserId: String) {
+        _items.value = _items.value.map {
+            if (it.id == itemId) {
+                it.copy(
+                    name = name,
+                    quantity = quantity,
+                    category = category,
+                    assignedUser = assignedUserId,
+                )
+            } else {
+                it
+            }
+        }
+    }
+
+    private fun deleteItem(itemId: String) {
+        _items.value = _items.value.filter { it.id != itemId }
     }
 
     private fun addItem(name: String, quantity: String, category: ItemCategory, assignedUserId: String) {

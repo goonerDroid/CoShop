@@ -106,6 +106,7 @@ fun ShoppingListScreen(viewModel: ShoppingListViewModel = remember { ShoppingLis
                             assignedMemberName = memberNameById[item.assignedUser] ?: "Unknown",
                             assignedMemberColor = memberColorById[item.assignedUser],
                             onCheckedChange = { checked -> viewModel.toggleItemDone(item.id, checked) },
+                            onItemClick = { viewModel.showEditItemDialog(item) },
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                         )
                     }
@@ -148,6 +149,27 @@ fun ShoppingListScreen(viewModel: ShoppingListViewModel = remember { ShoppingLis
                 viewModel.addOrCheckDuplicateItem(name, quantity, category, assignedUserId)
             },
         )
+    }
+
+    if (uiState.showEditItemDialog) {
+        val editingItem = uiState.editingItem
+
+        if (editingItem != null) {
+            AddItemDialog(
+                editingItem = editingItem,
+                familyMembers = familyMembers,
+                onDismiss = { viewModel.hideEditItemDialog() },
+                onConfirm = { name, quantity, category, assignedUserId ->
+                    viewModel.editItem(
+                        editingItem.id,
+                        name,
+                        quantity,
+                        category,
+                        assignedUserId,
+                    )
+                },
+            )
+        }
     }
 
     if (uiState.showDuplicateDialog) {
