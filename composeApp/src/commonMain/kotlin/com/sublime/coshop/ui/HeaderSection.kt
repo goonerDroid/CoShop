@@ -52,6 +52,7 @@ fun HeaderSection(
     shoppingLists: List<ShoppingList> = emptyList(),
     onListSelected: (ShoppingList) -> Unit = {},
     onAddListClick: () -> Unit = {},
+    onHeaderInteraction: () -> Unit = {},
 ) {
     var showListPicker by remember { mutableStateOf(false) }
 
@@ -119,7 +120,10 @@ fun HeaderSection(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null,
                                     enabled = shoppingLists.isNotEmpty(),
-                                    onClick = { showListPicker = true },
+                                    onClick = {
+                                        onHeaderInteraction()
+                                        showListPicker = true
+                                    },
                                 ),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {

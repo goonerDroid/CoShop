@@ -13,9 +13,17 @@ data class ShoppingListUiState(
     val showAddItemDialog: Boolean = false,
     val showEditItemDialog: Boolean = false,
     val showDuplicateDialog: Boolean = false,
+    val showDeleteConfirmDialog: Boolean = false,
+    val showAssignItemDialog: Boolean = false,
     val duplicateItem: ShoppingItem? = null,
     val editingItem: ShoppingItem? = null,
     val pendingItem: PendingItem? = null,
+    val itemToDelete: ShoppingItem? = null,
+    val itemToAssign: ShoppingItem? = null,
+    val recentlyDeletedItem: ShoppingItem? = null,
+    val deletedItemIndex: Int = -1,
+    val showUndoSnackbar: Boolean = false,
+    val revealedItemId: String? = null,
 )
 
 @Immutable

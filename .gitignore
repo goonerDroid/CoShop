@@ -34,16 +34,4 @@ iosApp/Pods/
 iosApp/.appcode_settings/
 iosApp/*.xcworkspace
 iosApp/xcuserdata/
-/.claude/settings.local.json
-/.claude/commands/architecture-review.md
-/.claude/commands/code-review.md
-/.claude/commands/commit.md
-/.claude/scripts/context-monitor.py
-/.claude/commands/create-architecture-documentation.md
-/.claude/commands/generate-tests.md
-/.claude/agents/product-strategist.md
-/.claude/agents/prompt-engineer.md
-/.claude/commands/refactor-code.md
-/.claude/commands/todo.md
-/.claude/agents/ui-ux-designer.md
-/.claude/commands/ultra-think.md
+/.claude/

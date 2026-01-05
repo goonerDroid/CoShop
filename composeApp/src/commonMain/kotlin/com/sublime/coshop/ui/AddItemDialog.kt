@@ -2,26 +2,31 @@ package com.sublime.coshop.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,12 +38,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.sublime.coshop.data.models.FamilyMember
 import com.sublime.coshop.data.models.ItemCategory
 import com.sublime.coshop.data.models.ShoppingItem
+import coshop.composeapp.generated.resources.Res
+import coshop.composeapp.generated.resources.ic_close
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddItemDialog(
     familyMembers: List<FamilyMember>,
@@ -50,38 +59,91 @@ fun AddItemDialog(
     var quantity by remember { mutableStateOf(editingItem?.quantity ?: "") }
     var selectedCategory by remember { mutableStateOf(editingItem?.category ?: ItemCategory.PRODUCE) }
     var selectedMemberId by remember { mutableStateOf(editingItem?.assignedUser ?: familyMembers.firstOrNull()?.id ?: "") }
+    var categoryExpanded by remember { mutableStateOf(false) }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = if (editingItem != null) "Edit Item" else "Add Item",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-            )
-        },
-        text = {
-            Column {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            color = Color.White,
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = if (editingItem != null) "Edit Item" else "Add Item",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF212121),
+                        modifier = Modifier.weight(1f),
+                    )
+
+                    IconButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.size(24.dp),
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_close),
+                            contentDescription = "Close",
+                            tint = Color(0xFF757575),
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Item Name",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF212121),
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 OutlinedTextField(
                     value = itemName,
                     onValueChange = { itemName = it },
-                    label = { Text("Item Name") },
-                    placeholder = { Text("e.g., Organic Apples") },
+                    placeholder = { Text("Pasta", color = Color(0xFF9E9E9E)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color(0xFFE0E0E0),
+                        unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                        focusedContainerColor = Color(0xFFF5F5F5),
+                        unfocusedContainerColor = Color(0xFFF5F5F5),
+                    ),
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Quantity",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF212121),
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedTextField(
                     value = quantity,
                     onValueChange = { quantity = it },
-                    label = { Text("Quantity") },
-                    placeholder = { Text("e.g., 2 lbs") },
+                    placeholder = { Text("1 box", color = Color(0xFF9E9E9E)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color(0xFFE0E0E0),
+                        unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                        focusedContainerColor = Color(0xFFF5F5F5),
+                        unfocusedContainerColor = Color(0xFFF5F5F5),
+                    ),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -90,129 +152,146 @@ fun AddItemDialog(
                     text = "Category",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF757575),
+                    color = Color(0xFF212121),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ExposedDropdownMenuBox(
+                    expanded = categoryExpanded,
+                    onExpandedChange = { categoryExpanded = it },
                 ) {
-                    ItemCategory.entries.forEach { category ->
-                        val isSelected = category == selectedCategory
-                        Surface(
-                            modifier = Modifier
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null,
-                                    onClick = { selectedCategory = category },
-                                ),
-                            shape = RoundedCornerShape(20.dp),
-                            color = if (isSelected) category.color.copy(alpha = 0.15f) else Color(0xFFF5F5F5),
-                            border = androidx.compose.foundation.BorderStroke(
-                                width = if (isSelected) 2.dp else 0.dp,
-                                color = if (isSelected) category.color else Color.Transparent,
-                            ),
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = category.icon,
-                                    fontSize = 16.sp,
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = category.displayName,
-                                    fontSize = 12.sp,
-                                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                    color = if (isSelected) category.color else Color(0xFF757575),
-                                )
-                            }
-                        }
-                    }
-                }
+                    TextField(
+                        value = selectedCategory.displayName,
+                        onValueChange = {},
+                        readOnly = true,
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(androidx.compose.material3.ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedContainerColor = Color(0xFFF5F5F5),
+                            unfocusedContainerColor = Color(0xFFF5F5F5),
+                        ),
+                    )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Assign to",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF757575),
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    familyMembers.forEach { member ->
-                        val isSelected = member.id == selectedMemberId
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = { selectedMemberId = member.id },
-                            ),
-                        ) {
-                            Box {
-                                Surface(
-                                    modifier = Modifier.size(44.dp),
-                                    shape = CircleShape,
-                                    color = member.color,
-                                    border = androidx.compose.foundation.BorderStroke(
-                                        width = if (isSelected) 3.dp else 0.dp,
-                                        color = if (isSelected) Color(0xFF1976D2) else Color.Transparent,
-                                    ),
-                                ) {
-                                    Box(contentAlignment = Alignment.Center) {
-                                        Text(
-                                            text = member.initial,
-                                            color = Color.White,
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 16.sp,
-                                        )
-                                    }
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = if (member.isCurrentUser) "You" else member.name,
-                                fontSize = 10.sp,
-                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                color = if (isSelected) Color(0xFF1976D2) else Color(0xFF757575),
+                    ExposedDropdownMenu(
+                        expanded = categoryExpanded,
+                        onDismissRequest = { categoryExpanded = false },
+                    ) {
+                        ItemCategory.entries.forEach { category ->
+                            DropdownMenuItem(
+                                text = { Text("${category.icon} ${category.displayName}") },
+                                onClick = {
+                                    selectedCategory = category
+                                    categoryExpanded = false
+                                },
                             )
                         }
                     }
                 }
+
+                if (editingItem == null) {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Assign to",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF212121),
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        familyMembers.forEach { member ->
+                            val isSelected = member.id == selectedMemberId
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = null,
+                                        onClick = { selectedMemberId = member.id },
+                                    )
+                                    .padding(end = 16.dp),
+                            ) {
+                                Box {
+                                    Surface(
+                                        modifier = Modifier.size(44.dp),
+                                        shape = CircleShape,
+                                        color = member.color,
+                                        border = androidx.compose.foundation.BorderStroke(
+                                            width = if (isSelected) 3.dp else 0.dp,
+                                            color = if (isSelected) Color(0xFF1976D2) else Color.Transparent,
+                                        ),
+                                    ) {
+                                        Box(contentAlignment = Alignment.Center) {
+                                            Text(
+                                                text = member.initial,
+                                                color = Color.White,
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 16.sp,
+                                            )
+                                        }
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = if (member.isCurrentUser) "You" else member.name,
+                                    fontSize = 10.sp,
+                                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                    color = if (isSelected) Color(0xFF1976D2) else Color(0xFF757575),
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Button(
+                    onClick = { onConfirm(itemName, quantity, selectedCategory, selectedMemberId) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF0D1B2A),
+                        contentColor = Color.White,
+                    ),
+                    enabled = itemName.isNotBlank() && quantity.isNotBlank(),
+                ) {
+                    Text(
+                        text = if (editingItem != null) "Save Changes" else "Add Item",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                OutlinedButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = Color(0xFF212121),
+                    ),
+                ) {
+                    Text(
+                        text = "Cancel",
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+                }
             }
-        },
-        confirmButton = {
-            val isFormValid = itemName.isNotBlank() && quantity.isNotBlank()
-            TextButton(
-                onClick = { onConfirm(itemName, quantity, selectedCategory, selectedMemberId) },
-                enabled = isFormValid,
-            ) {
-                Text(
-                    text = if (editingItem != null) "Save" else "Add",
-                    color = if (isFormValid) Color(0xFF1976D2) else Color(0xFFBDBDBD),
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(
-                    text = "Cancel",
-                    color = Color(0xFF757575),
-                )
-            }
-        },
-    )
+        }
+    }
 }
 
 @Preview

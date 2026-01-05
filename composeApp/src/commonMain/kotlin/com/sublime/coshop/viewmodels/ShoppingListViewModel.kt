@@ -36,14 +36,13 @@ class ShoppingListViewModel {
 
     val currentList = derivedStateOf {
         _shoppingLists.value.firstOrNull { it.id == _uiState.value.selectedListId }
-            ?: _shoppingLists.value.firstOrNull()
-            ?: ShoppingList(
-                id = "",
-                name = "No Lists",
-                emoji = "📝",
-                familyId = "",
-                isDefault = true,
-            )
+            ?: _shoppingLists.value.firstOrNull() ?: ShoppingList(
+            id = "",
+            name = "No Lists",
+            emoji = "📝",
+            familyId = "",
+            isDefault = true,
+        )
     }
 
     val completedCount = derivedStateOf {
@@ -80,6 +79,7 @@ class ShoppingListViewModel {
             FilterTab.MINE -> itemsForCurrentList.value.filter {
                 it.assignedUser == MockData.currentUserId
             }
+
             FilterTab.ACTIVE -> itemsForCurrentList.value.filter { !it.isDone }
             FilterTab.DONE -> itemsForCurrentList.value.filter { it.isDone }
         }
@@ -124,6 +124,46 @@ class ShoppingListViewModel {
             showEditItemDialog = false,
             editingItem = null,
         )
+    }
+
+    fun showDeleteConfirmDialog(item: ShoppingItem) {
+        _uiState.value = _uiState.value.copy(
+            showDeleteConfirmDialog = true,
+            itemToDelete = item,
+        )
+    }
+
+    fun hideDeleteConfirmDialog() {
+        _uiState.value = _uiState.value.copy(
+            showDeleteConfirmDialog = false,
+            itemToDelete = null,
+        )
+    }
+
+    fun showAssignItemDialog(item: ShoppingItem) {
+        _uiState.value = _uiState.value.copy(
+            showAssignItemDialog = true,
+            itemToAssign = item,
+        )
+    }
+
+    fun hideAssignItemDialog() {
+        _uiState.value = _uiState.value.copy(
+            showAssignItemDialog = false,
+            itemToAssign = null,
+        )
+    }
+
+    fun revealItem(itemId: String) {
+        _uiState.value = _uiState.value.copy(revealedItemId = itemId)
+    }
+
+    fun hideReveal() {
+        _uiState.value = _uiState.value.copy(revealedItemId = null)
+    }
+
+    fun handleModifyUser(item: ShoppingItem) {
+        showAssignItemDialog(item)
     }
 
     fun hideDuplicateDialog() {
@@ -260,7 +300,67 @@ class ShoppingListViewModel {
         }
 
         updateItem(itemId, normalizedName, normalizedQuantity, category, assignedUserId)
-        hideEditItemDialog()
+        _uiState.value = _uiState.value.copy(
+            revealedItemId = null,
+            showEditItemDialog = false,
+            editingItem = null,
+        )
+    }
+
+    fun assignItemToUser(itemId: String, assignedUserId: String) {
+        _items.value = _items.value.map {
+            if (it.id == itemId) {
+                it.copy(assignedUser = assignedUserId)
+            } else {
+                it
+            }
+        }
+        _uiState.value = _uiState.value.copy(
+            revealedItemId = null,
+            showAssignItemDialog = false,
+            itemToAssign = null,
+        )
+    }
+
+    fun confirmDelete() {
+        val item = _uiState.value.itemToDelete
+        if (item != null) {
+            val index = _items.value.indexOfFirst { it.id == item.id }
+            _items.value = _items.value.filter { it.id != item.id }
+            _uiState.value = _uiState.value.copy(
+                showDeleteConfirmDialog = false,
+                showEditItemDialog = false,
+                itemToDelete = null,
+                recentlyDeletedItem = item,
+                deletedItemIndex = index,
+                showUndoSnackbar = true,
+                revealedItemId = null,
+            )
+        }
+    }
+
+    fun undoDelete() {
+        val item = _uiState.value.recentlyDeletedItem
+        val index = _uiState.value.deletedItemIndex
+        if (item != null && index >= 0) {
+            val currentItems = _items.value.toMutableList()
+            val insertIndex = index.coerceAtMost(currentItems.size)
+            currentItems.add(insertIndex, item)
+            _items.value = currentItems
+            _uiState.value = _uiState.value.copy(
+                recentlyDeletedItem = null,
+                deletedItemIndex = -1,
+                showUndoSnackbar = false,
+            )
+        }
+    }
+
+    fun confirmPermanentDelete() {
+        _uiState.value = _uiState.value.copy(
+            recentlyDeletedItem = null,
+            deletedItemIndex = -1,
+            showUndoSnackbar = false,
+        )
     }
 
     private fun updateItem(itemId: String, name: String, quantity: String, category: ItemCategory, assignedUserId: String) {
@@ -276,10 +376,6 @@ class ShoppingListViewModel {
                 it
             }
         }
-    }
-
-    private fun deleteItem(itemId: String) {
-        _items.value = _items.value.filter { it.id != itemId }
     }
 
     private fun addItem(name: String, quantity: String, category: ItemCategory, assignedUserId: String) {
